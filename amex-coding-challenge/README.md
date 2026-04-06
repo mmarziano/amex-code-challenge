@@ -1,73 +1,103 @@
-# React + TypeScript + Vite
+# Accordion Code Challenge
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a React + TypeScript implementation of an accessible accordion component.
 
-Currently, two official plugins are available:
+The solution focuses on:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- a reusable, typed component API
+- accessibility-first behavior and semantics
+- design token usage through CSS custom properties
+- required test coverage
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React 19
+- TypeScript
+- Vite
+- Vitest + React Testing Library
+- ESLint + Prettier
+- MUI
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Open the app in your browser from the local URL printed by Vite.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Scripts
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- `npm run dev` - start development server
+- `npm run build` - build production bundle
+- `npm run test` - run unit/integration tests
+- `npm run lint` - run ESLint
+- `npm run typecheck` - run TypeScript checks without emit
+- `npm run check` - run typecheck, lint, and formatting check
+
+## Component API
+
+`Accordion` accepts:
+
+- `panels: AccordionPanel[]` (required)
+- `shouldAllowMultipleExpanded?: boolean` (defaults to `true`)
+
+`AccordionPanel` shape:
+
+- `id: string` - stable identifier for keys/aria linkage
+- `title: string` - trigger label
+- `content: ReactNode` - region content
+
+Behavior:
+
+- In multi-expand mode, multiple panels can remain open.
+- In single-expand mode, opening one panel closes the previously open panel.
+- Clicking an expanded panel toggles it closed.
+
+## Accessibility Decisions
+
+The component uses native button semantics and explicit ARIA relationships:
+
+- trigger button exposes `aria-expanded` and `aria-controls`
+- content region uses `role="region"` and `aria-labelledby`
+
+## Design System Layer
+
+Tokens live in `src/design-system/tokens.ts` and are mapped to CSS variables in `src/design-system/theme.ts`.
+
+- centralized values for color, spacing, typography, radius, and motion
+- component styling through semantic variables
+
+## Testing Approach
+
+Tests in `src/components/Accordion/Accordion.test.tsx` cover:
+
+- initial collapsed render
+- expand/collapse interactions
+- multi-expand and single-expand behavior
+- mode-switch reset behavior
+- ARIA linkage integrity for controls and regions
+
+Run:
+
+```bash
+npm run test
 ```
+
+## Project Structure
+
+```text
+src/
+  components/
+    Accordion/
+  design-system/
+  test/
+```
+
+## Notes
+
+- The accordion is implemented with MUI primitives (`Accordion`, `AccordionSummary`, `AccordionDetails`)
+- Design tokens remain the source of truth for visual decisions through CSS custom properties.
+
+- I opted for a small, easy-to-demo project to meet the challenge requirements. In a production environment, I would typically house the design system in its own repository/package and manage it as a shared dependency (standalone package or Git submodule) so it can be consumed consistently across multiple applications
