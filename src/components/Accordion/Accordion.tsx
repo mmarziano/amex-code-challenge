@@ -102,6 +102,12 @@ export function Accordion({
                   ? 'var(--color-interactive)'
                   : 'transparent',
                 transition: 'background-color var(--motion-fast) ease',
+                '&:focus': {
+                  outline: 'none',
+                },
+                '&:focus:not(:focus-visible)': {
+                  outline: 'none',
+                },
                 '&:hover': {
                   background: isExpanded
                     ? 'var(--color-interactive)'
@@ -122,8 +128,23 @@ export function Accordion({
                   transform: 'rotate(180deg)',
                 },
                 '&.Mui-focusVisible': {
+                  background: isExpanded
+                    ? 'var(--color-interactive)'
+                    : 'var(--color-interactive-hover)',
                   outline: '3px solid var(--color-focus-ring)',
                   outlineOffset: '-3px',
+                },
+                '&:focus-visible': {
+                  background: isExpanded
+                    ? 'var(--color-interactive)'
+                    : 'var(--color-interactive-hover)',
+                  outline: '3px solid var(--color-focus-ring)',
+                  outlineOffset: '-3px',
+                },
+                '&.Mui-focusVisible:hover': {
+                  background: isExpanded
+                    ? 'var(--color-interactive)'
+                    : 'var(--color-interactive-hover)',
                 },
                 '@media (prefers-reduced-motion: reduce)': {
                   '& .MuiAccordionSummary-expandIconWrapper': {
