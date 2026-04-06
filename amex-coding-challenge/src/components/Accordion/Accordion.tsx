@@ -2,8 +2,6 @@ import { useId, useState } from 'react'
 import MuiAccordion from '@mui/material/Accordion'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import AccordionSummary from '@mui/material/AccordionSummary'
-import AddIcon from '@mui/icons-material/Add'
-import RemoveIcon from '@mui/icons-material/Remove'
 import type {
   AccordionExpansionMode,
   AccordionPanelId,
@@ -93,7 +91,9 @@ export function Accordion({
             <AccordionSummary
               id={buttonId}
               aria-controls={regionId}
-              expandIcon={isExpanded ? <RemoveIcon /> : <AddIcon />}
+              expandIcon={
+                <span aria-hidden="true">{isExpanded ? '\u2212' : '+'}</span>
+              }
               sx={{
                 minHeight: 'auto',
                 padding: 'var(--space-lg)',
