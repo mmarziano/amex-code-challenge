@@ -2,6 +2,13 @@ import { useState, useRef, useEffect } from 'react';
 import type { PopoverProps } from './Popover.types';
 import './Popover.css';
 
+// We have created a new Popover component, but there are a few bugs. Please solve in the following order:
+// 1. Popover does not close when clicking outside of it
+// 2. Popover does not close when the escape key is pressed
+// 3. Popover does not focus on the first interactive element when it opens
+// 4. Unit tests for accessibility are failing
+// 5. Popover content should have a background color of #D3D3D3
+
 export const Popover = ({ triggerLabel, id, children }: PopoverProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -12,14 +19,8 @@ export const Popover = ({ triggerLabel, id, children }: PopoverProps) => {
     setIsOpen(true);
   };
 
-  const close = () => {
-    setIsOpen(false);
-  };
-
   const handleTriggerClick = () => {
-    if (isOpen) {
-      close();
-    } else {
+    if (!isOpen) {
       open();
     }
   };
@@ -28,7 +29,7 @@ export const Popover = ({ triggerLabel, id, children }: PopoverProps) => {
   useEffect(() => {
     if (isOpen && contentRef.current) {
       const focusable = contentRef.current.querySelector<HTMLElement>(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        '[href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
       );
       focusable?.focus();
     }
@@ -37,13 +38,6 @@ export const Popover = ({ triggerLabel, id, children }: PopoverProps) => {
   useEffect(() => {
     if (!isOpen) return;
 
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        close();
-        triggerRef.current?.focus();
-      }
-    };
-
     const handleClickOutside = (e: MouseEvent) => {
       if (
         contentRef.current &&
@@ -51,14 +45,12 @@ export const Popover = ({ triggerLabel, id, children }: PopoverProps) => {
         triggerRef.current &&
         !triggerRef.current.contains(e.target as Node)
       ) {
-        close();
+        // user has clicked outside the popover trigger and content
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
       document.removeEventListener('mousedown', handleClickOutside);
     };
   });
@@ -67,8 +59,6 @@ export const Popover = ({ triggerLabel, id, children }: PopoverProps) => {
     <>
       <button
         ref={triggerRef}
-        aria-expanded={isOpen}
-        aria-controls={contentId}
         onClick={handleTriggerClick}
         className="popover-trigger"
       >
