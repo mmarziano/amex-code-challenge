@@ -1,0 +1,26 @@
+.popover-trigger {
+    width: 50%;
+}
+
+.popover {
+    width: 50%;
+    border-style: solid;
+    padding: 1rem;
+    border-radius: 1rem;
+}
+
+.popover > button {
+    margin: 1rem;
+}
+
+.popover > button:focus {
+    border: 2px solid blue;
+}
+
+.popover > a {
+    margin: 1rem;
+}
+
+.popover > a:focus {
+    border: 2px solid blue;
+}

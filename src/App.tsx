@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Accordion, type AccordionPanel } from './components/Accordion'
 import './App.css'
 import { FormControlLabel, Switch } from '@mui/material'
+import { Popover } from './components/Popover/Popover'
 
 function App() {
   const [allowMultipleExpanded, setAllowMultipleExpanded] = useState(false)
@@ -47,6 +48,15 @@ function App() {
         panels={accordionPanels}
         shouldAllowMultipleExpanded={allowMultipleExpanded}
       />
+      <hr />
+      <h1>Popover</h1>
+      <Popover triggerLabel="Popover Trigger" id="test-popover">  
+        <p>Popover Content</p>  
+        <br />
+        <button>Button in Popover Content</button>
+        <br />
+        <a href="/">Link in Popover Content</a>
+      </Popover> 
     </main>
   )
 }
